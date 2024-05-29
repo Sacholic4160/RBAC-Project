@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const user = require('./user.model.js');
-const post = require('./post.model.js')
 
 const permissionSchema = new mongoose.Schema({
     owner: {

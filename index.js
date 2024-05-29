@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 app.use(express.static('public'));
+app.use(express.json()) // here if we have express version below 4.16 then we have install dependency like body-parser to read json but in about versions it is inbuilt in express
 
 const port = process.env.PORT || 3000;
 
