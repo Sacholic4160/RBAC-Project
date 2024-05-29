@@ -1,14 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const authRoute = require('./router/auth.route.js');
 
 const app = express();
 app.use(express.static('public'));
 app.use(express.json()) // here if we have express version below 4.16 then we have install dependency like body-parser to read json but in about versions it is inbuilt in express
-
+app.use('/api/authUser', authRoute);
 const port = process.env.PORT || 3000;
 
-mongoose.connect('mongodb+srv://sachinparmar4160:PUa3h894kCUcUgVQ@cluster-rbac.hqbujw5.mongodb.net/')
+mongoose.connect('mongodb+srv://sachinparmar4160:PUa3h894kCUcUgVQ@cluster-rbac.hqbujw5.mongodb.net/RBAC-db')
     .then(connectionInstance => {
         console.log(`mongodb connected successfully on: ${connectionInstance.connection.host}`);
 
