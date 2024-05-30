@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
-const user = require('./user.model.js');
 
 const permissionSchema = new mongoose.Schema({
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
+    permission_name: {
+        type: String,
         required: true
     },
-    permission: [{
-        permission_name: String,
-        permission_value: [Number] // 0 -> create , 1 -> edit , 2 -> read , 3 -> delete
-    }]
+    is_default: {
+        type: Number,
+        default: 0 //  0 -> not defaualt , 1 -> default
+    }
+
+
 }, { timestamps: true })
 
 
-module.exports = mongoose.model('like', likeSchema);
+module.exports = mongoose.model('permission', permissionSchema);
