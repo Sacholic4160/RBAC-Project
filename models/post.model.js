@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const category = require('./category.model.js')
 const postSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -9,10 +9,11 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    category: {
-        type: Array,
-        required: true
-    }
+    category: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'category',
+        required: false
+    }]
 }, { timestamps: true })
 
 
