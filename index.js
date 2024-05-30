@@ -3,12 +3,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoute = require('./router/auth.route.js');
 const adminRoute = require('./router/admin.route.js')
+const commonRoute = require('./router/common.route.js');
 
 const app = express();
 app.use(express.static('public'));
 app.use(express.json()) // here if we have express version below 4.16 then we have install dependency like body-parser to read json but in about versions it is inbuilt in express
 app.use('/api/authUser', authRoute);
 app.use('/api/admin', adminRoute)
+app.use('/api', commonRoute)
 const port = process.env.PORT || 3000;
 
 mongoose.connect('mongodb+srv://sachinparmar4160:PUa3h894kCUcUgVQ@cluster-rbac.hqbujw5.mongodb.net/RBAC-db')
@@ -22,3 +24,4 @@ mongoose.connect('mongodb+srv://sachinparmar4160:PUa3h894kCUcUgVQ@cluster-rbac.h
     .catch(error => {
         console.error('Error connecting to MongoDB:', error);
     });
+// mongodb+srv://sachinparmar4160:PUa3h894kCUcUgVQ@cluster-rbac.hqbujw5.mongodb.net/

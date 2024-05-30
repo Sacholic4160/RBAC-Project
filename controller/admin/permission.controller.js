@@ -16,7 +16,12 @@ const addPermission = async (req, res) => {
 
         const { permission_name } = req.body
 
-        const isExists = await permission.findOne({ permission_name })
+        const isExists = await permission.findOne({
+            permission_name: {
+                $regex: permission_name,
+                $options: 'i'
+            }
+        })
 
         if (isExists) {
             return res.status(200).json({
@@ -87,11 +92,20 @@ const deletePermission = async (req, res) => {
 
         const { id } = req.body
 
-        const Permission = await permission.findByIdAndDelete({ _id: id })
+        const Permission = await permission.findOne({ _id: id })
+
+        if (!(Permission)) {
+            return res.status(200).json({
+                success: false,
+                msg: 'Permission with given id does not exist!'
+            })
+        }
+
+        await Permission.remove();
 
         return res.status(200).json({
             success: true,
-            msg: 'Permission delete successfully!'
+            msg: 'Permission deleted successfully!'
         })
 
 
@@ -131,7 +145,10 @@ const updatePermission = async (req, res) => {
         const isNameAssigned = await permission.findOne(
             {
                 _id: { $ne: id },
-                permission_name
+                permission_name: {
+                    $regex: permission_name,
+                    $options: 'i'
+                }
             })
 
         if ((isNameAssigned)) {
