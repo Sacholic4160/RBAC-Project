@@ -2,6 +2,8 @@ const user = require('../models/user.model.js')
 const { validationResult } = require('express-validator')
 const bcrpyt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const verifyJWT = require('../middleware/auth.middleware.js');
+const { ResultWithContextImpl } = require('express-validator/lib/chain/context-runner-impl.js');
 
 const registerUser = async (req, res) => {
     try {
@@ -104,5 +106,23 @@ const loginUser = async (req, res) => {
     }
 }
 
+const getProfile = async (req, res) => {
+    try {
 
-module.exports = { registerUser, loginUser }
+
+        return res.status(200).json({
+            success: true,
+            msg: 'Profile Fetched Successfully!',
+            data: (req.user)
+        })
+
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            msg: error.message
+        })
+    }
+}
+
+
+module.exports = { registerUser, loginUser, getProfile }
