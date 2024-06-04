@@ -50,6 +50,13 @@ const postDeleteValidator = [
     check('id', 'id is required!').not().isEmpty(),
 ]
 
+//...........role validator.....................................
+const setRoleValidator = [
+    check('roleName', 'role name is required!').not().isEmpty(),
+    check('value', 'role value is required').not().isEmpty()
+]
 
 
-module.exports = { permissionAddValidator, permissionDeleteValidator, permissionUpdateValidator, categoryAddValidator, categoryUpdateValidator, categoryDeleteValidator, postCreateValidator, postUpdateValidator, postDeleteValidator }
+
+
+module.exports = { permissionAddValidator, permissionDeleteValidator, permissionUpdateValidator, categoryAddValidator, categoryUpdateValidator, categoryDeleteValidator, postCreateValidator, postUpdateValidator, postDeleteValidator, setRoleValidator}
