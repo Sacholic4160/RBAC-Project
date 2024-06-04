@@ -31,25 +31,25 @@ const categoryDeleteValidator = [
 
 //.............Post Validators....................................
 
-const createPostValidator = [
-    check('title', 'title is required!').not.isEmpty(),
-    check('description', 'description is required!').not.isEmpty(),
+const postCreateValidator = [
+    check('title', 'title is required!').not().isEmpty(),
+    check('description', 'description is required!').not().isEmpty(),
     //check('category', 'category is required!').not.isEmpty(),
 ]
 
-const updatePostValidator = [
-    check('title', 'title is required!').not.isEmpty(),
-    check('description', 'description is required!').not.isEmpty(),
-   // check('category', 'category is required!').not.isEmpty(),
-    check('id', 'id is required!').not.isEmpty(),
+const postUpdateValidator = [
+    check('title', 'title is required!').not().isEmpty(),
+    check('description', 'description is required!').not().isEmpty(),
+    // check('category', 'category is required!').not.isEmpty(),
+    check('id', 'id is required!').not().isEmpty(),
 
 ]
 
 
-const deletePostValidator = [
-    check('id', 'id is required!').not.isEmpty(),
+const postDeleteValidator = [
+    check('id', 'id is required!').not().isEmpty(),
 ]
 
 
 
-module.exports = { permissionAddValidator, permissionDeleteValidator, permissionUpdateValidator, categoryAddValidator, categoryUpdateValidator, categoryDeleteValidator, createPostValidator, updatePostValidator, deletePostValidator }
+module.exports = { permissionAddValidator, permissionDeleteValidator, permissionUpdateValidator, categoryAddValidator, categoryUpdateValidator, categoryDeleteValidator, postCreateValidator, postUpdateValidator, postDeleteValidator }

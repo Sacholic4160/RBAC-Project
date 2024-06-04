@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    category: [{
+    categories: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'category',
         required: false
