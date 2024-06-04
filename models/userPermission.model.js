@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const user = require('./user.model.js');
 
 const userPermissionSchema = new mongoose.Schema({
-    owner: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
         required: true

@@ -1,9 +1,10 @@
 const user = require('../models/user.model.js')
+const permission = require('../models/permission.model.js')
+const userPermission = require('../models/userPermission.model.js')
 const { validationResult } = require('express-validator')
 const bcrpyt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const verifyJWT = require('../middleware/auth.middleware.js');
-const { ResultWithContextImpl } = require('express-validator/lib/chain/context-runner-impl.js');
 
 const registerUser = async (req, res) => {
     try {
@@ -33,6 +34,25 @@ const registerUser = async (req, res) => {
             password: hashedPassword
         });
         const userData = await User.save();
+
+        //assign default permissions 
+        const defaultPermission = await permission.find({ is_default:1 });
+
+          const permissionArray = [];
+        if(defaultPermission.length > 0){
+            defaultPermission.forEach(permission => {
+          permissionArray.push({
+            permission_name:permission.permission_name,
+            permission_value:[0,1,2,3]
+          })
+            })
+        }
+
+        const userPermissionData = new userPermission({
+            user_id:userData._id,
+            permission:permissionArray
+        })
+        await userPermissionData.save();
 
         return res.status(200).json({
             success: true,
