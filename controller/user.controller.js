@@ -3,6 +3,8 @@ const { validationResult } = require("express-validator")
 const user = require('../models/user.model.js')
 const randomString = require('randomstring');
 const bcrypt = require('bcrypt');
+const mailer = require('../helpers/sendMail.helper.js');
+const { use } = require("../router/common.route.js");
 
 const createUser = async (req, res) => {
 
@@ -52,6 +54,27 @@ const createUser = async (req, res) => {
 
         const User = new user(obj)
         const userData = await User.save();
+
+        const content = `
+        <p>Hii <b> ${userData.name}, <b> Your account is created, below is your details.<p>
+        <table style='border-style:none;'>
+        <tr>
+        <th> Name:- </th>
+        <td> ${userData.name} </td>
+        </tr>
+        <tr>
+        <th> Email:- </th>
+        <td> ${userData.email} </td>
+        </tr>
+        <tr>
+        <th> Password:- </th>
+        <td> ${userData.password} </td>
+        </tr>
+</table>
+ <p>Now you can login you accound </p>
+        `
+
+        mailer(userData.email, 'user created', content )
 
         return res.status(200).json({
             success: true,
