@@ -34,10 +34,22 @@ const userDeleteValidator = [
     check('id','id is required').not().isEmpty()
 ]
 
+const postLikeAndUnlikeValidator = [
+    check('user_id', 'user_id is required').not().isEmpty(),
+    check('post_id', 'Please provide a valid post_id').not().isEmpty()
+
+]
+
+const postLikeCountValidator = [
+    check('post_id','post_id is required').not().isEmpty()
+]
+
 module.exports = {
     registerValidator,
     loginValidator,
     userCreateValidator,
     userUpdateValidator,
-    userDeleteValidator
+    userDeleteValidator,
+    postLikeAndUnlikeValidator,
+    postLikeCountValidator
 }

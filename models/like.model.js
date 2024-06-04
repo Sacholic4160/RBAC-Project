@@ -3,12 +3,12 @@ const user = require('./user.model.js');
 const post = require('./post.model.js')
 
 const likeSchema = new mongoose.Schema({
-    owner: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
         required: true
     },
-    post: {
+    post_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'post',
         required: true
