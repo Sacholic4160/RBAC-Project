@@ -177,4 +177,44 @@ return res.status(200).json({
     }
 }
 
-module.exports = { createUser, getUsers, updateUser }
+const deleteUser = async (req,res) => {
+    try {
+    
+         
+        const errors = validationResult(req);
+
+        if (!(errors.isEmpty())) {
+            return res.status(200).json({
+                success: false,
+                msg: 'Errors',
+                error: errors.array()
+            })
+        }
+
+        const { id } = req.body;
+
+        const isExist = await user.findOne({
+            _id: id
+        })
+
+        if (!isExist) {
+            return res.status(400).json({
+                success: false,
+                msg: 'user with this id does not exist to delete',
+            })
+        }
+
+        await user.findByIdAndDelete({_id: id})
+        return res.status(200).json({
+            success: true,
+            msg: 'user deleted successfully'
+        })
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            msg: error.message
+        })   
+    }
+}
+
+module.exports = { createUser, getUsers, updateUser, deleteUser }
