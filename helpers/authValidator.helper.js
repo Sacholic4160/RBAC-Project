@@ -16,8 +16,17 @@ const loginValidator = [
 
 ]
 
+//........user creation validation manually
+const userCreateValidator = [
+    check('name', 'Name is required').not().isEmpty(),
+    check('email', 'Please provide a valid Email').isEmail().normalizeEmail({
+        gmail_remove_dots: true
+    }),
+
+]
 
 module.exports = {
     registerValidator,
-    loginValidator
+    loginValidator,
+    userCreateValidator
 }
