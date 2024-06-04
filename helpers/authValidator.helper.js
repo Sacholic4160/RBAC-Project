@@ -24,9 +24,16 @@ const userCreateValidator = [
     }),
 
 ]
+const userUpdateValidator = [
+    check('name', 'Name is required').not().isEmpty(),
+    check('id', 'Please provide a valid id').not().isEmail()
+
+
+]
 
 module.exports = {
     registerValidator,
     loginValidator,
-    userCreateValidator
+    userCreateValidator,
+    userUpdateValidator
 }
