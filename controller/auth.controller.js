@@ -5,7 +5,7 @@ const { validationResult } = require('express-validator')
 const bcrpyt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const verifyJWT = require('../middleware/auth.middleware.js');
-const { aggregate} = require('mongoose')
+const { aggregate } = require('mongoose')
 
 const registerUser = async (req, res) => {
     try {
@@ -37,21 +37,21 @@ const registerUser = async (req, res) => {
         const userData = await User.save();
 
         //assign default permissions 
-        const defaultPermission = await permission.find({ is_default:1 });
+        const defaultPermission = await permission.find({ is_default: 1 });
 
-          const permissionArray = [];
-        if(defaultPermission.length > 0){
+        const permissionArray = [];
+        if (defaultPermission.length > 0) {
             defaultPermission.forEach(permission => {
-          permissionArray.push({
-            permission_name:permission.permission_name,
-            permission_value:[0,1,2,3]
-          })
+                permissionArray.push({
+                    permission_name: permission.permission_name,
+                    permission_value: [0, 1, 2, 3]
+                })
             })
         }
 
         const userPermissionData = new userpermission({
-            user_id:userData._id,
-            permission:permissionArray
+            user_id: userData._id,
+            permission: permissionArray
         })
         await userPermissionData.save();
 
@@ -114,25 +114,39 @@ const loginUser = async (req, res) => {
         //get user data with all permissions
         const result = await user.aggregate([
             {
-                $match:{
-               email: userData.email
+                $match: {
+                    email: userData.email
                 }
             },
             {
-                $lookup:{
+                $lookup: {
                     from: "userpermissions",
                     localField: "_id",
                     foreignField: "user_id",
-                    as:"permissions"
+                    as: "permissions"
                 }
             },
             {
-                $project:{
-                    _id:1,
-                    email:1,
-                    name:1,
-                    role:1,
-                    permi
+                $project: {
+                    _id: 1, //here we can only set the value of id to zero(0) and not others ,, if we do this it will throw error so either dont write  it or we wrote it then set it to 1
+                    email: 1,
+                    name: 1,
+                    role: 1,
+                    permissions: {
+                        $cond:{
+                            if: { $isArray: "$permissions"},
+                            then: { $arrayElemAt: [ "$permissions", 0 ]},//here we are returning the first element of array permissions
+                            else: null
+                        }
+                    },
+                    password: 1
+                }
+            },
+            {
+                $addFields:{
+                    "permissions": {
+                        "permissions":"$permissions.permissions"
+                    }
                 }
             }
         ])
