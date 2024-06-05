@@ -9,28 +9,29 @@ const { addCategory, getCategories, updateCategory, deleteCategory } = require('
 const { userCreateValidator, userUpdateValidator, userDeleteValidator,postLikeAndUnlikeValidator, postLikeCountValidator} = require('../helpers/authValidator.helper.js')
 const { createUser, updateUser, getUsers, deleteUser} = require('../controller/user.controller.js')
 const { likePost, unLikePost, postLikeCount } = require('../controller/like.controller.js')
+const { checkPermission } = require('../middleware/checkPermission.middleware.js')
 
 //.............................category route...........................
-router.post('/add-category', verifyJWT, categoryAddValidator, addCategory);
-router.get('/get-category', verifyJWT, getCategories);
-router.post('/update-category', verifyJWT, categoryUpdateValidator, updateCategory);
-router.delete('/delete-category', verifyJWT, categoryDeleteValidator, deleteCategory);
+router.post('/add-category', verifyJWT,checkPermission, categoryAddValidator, addCategory);
+router.get('/get-category', verifyJWT, checkPermission,  getCategories);
+router.post('/update-category', verifyJWT, checkPermission,  categoryUpdateValidator, updateCategory);
+router.delete('/delete-category', verifyJWT, checkPermission,  categoryDeleteValidator, deleteCategory);
 
 //....................post router..................................
-router.post('/create-post', verifyJWT, postCreateValidator, createPost)
-router.get('/get-post',verifyJWT,getPosts)
-router.post('/update-post',verifyJWT, postUpdateValidator,updatePost)
-router.delete('/delete-post',verifyJWT,postDeleteValidator,deletePost)
+router.post('/create-post', verifyJWT, checkPermission,  postCreateValidator, createPost)
+router.get('/get-post',verifyJWT, checkPermission, getPosts)
+router.post('/update-post',verifyJWT, checkPermission,  postUpdateValidator,updatePost)
+router.delete('/delete-post',verifyJWT, checkPermission, postDeleteValidator,deletePost)
 
 //................like and unlike post and count-like..............
-router.post('/like-post', verifyJWT, postLikeAndUnlikeValidator, likePost)
-router.post('/unLike-post', verifyJWT, postLikeAndUnlikeValidator, unLikePost)
-router.get('/count-postLike', verifyJWT, postLikeCountValidator, postLikeCount)
+router.post('/like-post', verifyJWT, checkPermission,  postLikeAndUnlikeValidator, likePost)
+router.post('/unLike-post', verifyJWT, checkPermission,  postLikeAndUnlikeValidator, unLikePost)
+router.get('/count-postLike', verifyJWT, checkPermission,  postLikeCountValidator, postLikeCount)
 
 //................user creation by admin/sub-admin
-router.post('/create-user',verifyJWT,userCreateValidator,createUser)
-router.post('/update-user',verifyJWT,userUpdateValidator,updateUser)
-router.get('/get-users',verifyJWT,getUsers)
-router.delete('/delete-user',verifyJWT,userDeleteValidator,deleteUser)
+router.post('/create-user',verifyJWT, checkPermission, userCreateValidator,createUser)
+router.post('/update-user',verifyJWT, checkPermission, userUpdateValidator,updateUser)
+router.get('/get-users',verifyJWT, checkPermission, getUsers)
+router.delete('/delete-user',verifyJWT, checkPermission, userDeleteValidator,deleteUser)
 
 module.exports = router;
