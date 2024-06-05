@@ -224,8 +224,34 @@ const updateUser = async (req, res) => {
 
         )
 
+        
+        //add permission to user if coming in request or update it
+        if (req.body.permissions != undefined && req.body.permissions.length > 0) {
+
+            const addPermission = req.body.permissions;
+
+            const permissionArray = [];
+
+            await Promise.all(addPermission.map(async (Permission) => {
+                const permissionData = await permission.findOne({ _id: Permission.id });
+
+                permissionArray.push({
+                    permission_name: permissionData.permission_name,
+                    permission_value: Permission.value,
+                })
+            }));
+
+        await userpermission.findOneAndUpdate(
+          {  user_id: updatedData._id},
+          { permission:permissionArray},
+          { upsert: true, new: true,setDefaultsOnInsert:true }
+
+        )
+
+        }
+
         return res.status(200).json({
-            success: true,
+            success: true,  
             msg: 'user updated successfully',
             data: updatedData
         })
