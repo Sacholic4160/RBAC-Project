@@ -4,11 +4,11 @@ const router = express();
 const verifyJWT = require('../middleware/auth.middleware.js');
 const onlyAdminAccess = require('../middleware/admin.middleware.js');
 
-const { permissionAddValidator, permissionDeleteValidator, permissionUpdateValidator, setRoleValidator,addOrUpdateRouteValidator } = require('../helpers/adminValidator.helper.js');
+const { permissionAddValidator, permissionDeleteValidator, permissionUpdateValidator, setRoleValidator,addOrUpdateRouteValidator, getRouteValidator } = require('../helpers/adminValidator.helper.js');
 
 const { addPermission, getPermission, updatePermission, deletePermission } = require('../controller/admin/permission.controller.js');
 const { setRole, getRole } = require('../controller/admin/role.controller.js');
-const { addOrUpdateRouter } = require('../controller/admin/router.controller.js')
+const { addOrUpdateRouterPermission,getRouterPermission } = require('../controller/admin/router.controller.js')
 
 
 //.................ADMIN Permission route................................................................
@@ -23,7 +23,8 @@ router.post('/set-role', verifyJWT, onlyAdminAccess, setRoleValidator, setRole)
 router.get('/get-role', verifyJWT, onlyAdminAccess, getRole)
 
 //router permission by admin route
-router.post('/addOrUpdate-router',verifyJWT,onlyAdminAccess,addOrUpdateRouteValidator,addOrUpdateRouter)
+router.post('/addOrUpdate-routerPermissions',verifyJWT,onlyAdminAccess,addOrUpdateRouteValidator,addOrUpdateRouterPermission)
+router.get('/router-Permissions',verifyJWT,onlyAdminAccess,getRouteValidator,getRouterPermission)
 
 
 

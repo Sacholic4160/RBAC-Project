@@ -6,6 +6,7 @@ const bcrpyt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const verifyJWT = require('../middleware/auth.middleware.js');
 const { aggregate } = require('mongoose')
+const {getUserPermissionsHelper} = require('../helpers/auth.helper.js')
 
 const registerUser = async (req, res) => {
     try {
@@ -170,13 +171,36 @@ const loginUser = async (req, res) => {
 const getProfile = async (req, res) => {
     try {
 
+         const user_id= req.user._id;
+         const userData = await user.findOne({ _id: user_id})
+
+
+        return res.status(200).json({
+            success: true,
+            msg: 'Profile Fetched Successfully!',
+            data: userData
+        })
+
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            msg: error.message
+        })
+    }
+}
+
+const getUserPermissions = async (req, res) => {
+    try {
+        const user_id = req.user._id;
+
+       const userPermissions = await getUserPermissionsHelper(user_id);
 
 
 
         return res.status(200).json({
             success: true,
             msg: 'Profile Fetched Successfully!',
-            data: (req.user)
+            data: userPermissions
         })
 
     } catch (error) {
@@ -188,4 +212,4 @@ const getProfile = async (req, res) => {
 }
 
 
-module.exports = { registerUser, loginUser, getProfile }
+module.exports = { registerUser, loginUser, getProfile , getUserPermissions}

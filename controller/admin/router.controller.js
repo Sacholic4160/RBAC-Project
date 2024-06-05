@@ -38,7 +38,7 @@ const getAllRoutes = async (req,res) => {
 
 
 
-const addOrUpdateRouter = async (req,res) => {
+const addOrUpdateRouterPermission = async (req,res) => {
     try {
 
         const errors = validationResult(req);
@@ -51,11 +51,11 @@ const addOrUpdateRouter = async (req,res) => {
             });
         }
 
-        const { router_endpoint , role , permission } = req.body;
+        const { router_endpoint , role ,permission_id, permission } = req.body;
 
        const routerPermissionData = await routerPermission.findOneAndUpdate({
             router_endpoint, role },
-        {  router_endpoint, role, permission },
+        {  router_endpoint, role,permission_id, permission },
         { upsert:true, new:true, setDefaultsOnInsert:true}
         )
 
@@ -72,4 +72,38 @@ const addOrUpdateRouter = async (req,res) => {
         }) 
     }
 }
-module.exports = { getAllRoutes, addOrUpdateRouter }
+
+
+const getRouterPermission = async (req,res) => {
+    try {
+
+        const errors = validationResult(req);
+
+        if (!(errors.isEmpty())) {
+            return res.status(200).json({
+                success: false,
+                msg: "Errors",
+                errors: errors.array(),
+            });
+        }
+
+        const { router_endpoint } = req.body;
+
+       const routerPermissions = await routerPermission.find({
+            router_endpoint}
+        ).populate('permission_id')
+
+        return res.status(200).json({
+            success: true,
+            msg: 'Router Permission fetched Successfully',
+            data: routerPermissions
+        }) 
+
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            msg: error.message
+        }) 
+    }
+}
+module.exports = { getAllRoutes, addOrUpdateRouterPermission, getRouterPermission }

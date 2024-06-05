@@ -10,6 +10,11 @@ const routerPermissionSchema = new mongoose.Schema({
         //default: 0  // 0 -> Normal user , 1-> Admin , 2-> sub-admin , 3-> editor
         required:true
     },
+    permission_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:'permission'
+    },
     permission:{
         type:Array, //0,1,2,3
         required:true
