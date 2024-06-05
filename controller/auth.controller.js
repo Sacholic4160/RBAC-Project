@@ -1,10 +1,11 @@
 const user = require('../models/user.model.js')
 const permission = require('../models/permission.model.js')
-const userPermission = require('../models/userPermission.model.js')
+const userpermission = require('../models/userPermission.model.js')
 const { validationResult } = require('express-validator')
 const bcrpyt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const verifyJWT = require('../middleware/auth.middleware.js');
+const { aggregate} = require('mongoose')
 
 const registerUser = async (req, res) => {
     try {
@@ -48,7 +49,7 @@ const registerUser = async (req, res) => {
             })
         }
 
-        const userPermissionData = new userPermission({
+        const userPermissionData = new userpermission({
             user_id:userData._id,
             permission:permissionArray
         })
@@ -110,12 +111,38 @@ const loginUser = async (req, res) => {
 
         const accessToken = await generateAccessToken({ user: userData })
 
+        //get user data with all permissions
+        const result = await user.aggregate([
+            {
+                $match:{
+               email: userData.email
+                }
+            },
+            {
+                $lookup:{
+                    from: "userpermissions",
+                    localField: "_id",
+                    foreignField: "user_id",
+                    as:"permissions"
+                }
+            },
+            {
+                $project:{
+                    _id:1,
+                    email:1,
+                    name:1,
+                    role:1,
+                    permi
+                }
+            }
+        ])
+
         return res.status(200).json({
             success: true,
             msg: 'User logged in successfully!',
             accessToken: accessToken,
             tokenType: 'Bearer',
-            data: userData,
+            data: result[0],
         })
 
     } catch (error) {
