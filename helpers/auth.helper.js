@@ -1,5 +1,6 @@
 const user = require('../models/user.model.js')
 const mongoose = require('mongoose')
+const routerPermission = require('../models/routerPermission.model.js')
 
 const getUserPermissionsHelper = async (user_id) =>{
     try {
@@ -52,4 +53,19 @@ const getUserPermissionsHelper = async (user_id) =>{
 }
 
 
-module.exports = { getUserPermissionsHelper }
+const getRouterPermission = async(router, role) => {
+    try {
+        
+        const routerPermissionData = await routerPermission.findOne({
+            router_endpoint:router,
+            role:role
+        }).populate('permission_id')
+
+        return routerPermissionData
+    } catch (error) {
+         console.log(error.message);
+         return null
+    }
+}
+
+module.exports = { getUserPermissionsHelper, getRouterPermission }
