@@ -57,6 +57,11 @@ const setRoleValidator = [
 ]
 
 
+//...........route validator.....................................
+const addOrUpdateRouteValidator = [
+    check('router_endpoint', 'router_endpoint is required!').not().isEmpty(),
+    check('role', 'role is required').not().isEmpty(),
+    check('permission', 'permission must be an array!').isArray(),
+]
 
-
-module.exports = { permissionAddValidator, permissionDeleteValidator, permissionUpdateValidator, categoryAddValidator, categoryUpdateValidator, categoryDeleteValidator, postCreateValidator, postUpdateValidator, postDeleteValidator, setRoleValidator}
+module.exports = { permissionAddValidator, permissionDeleteValidator, permissionUpdateValidator, categoryAddValidator, categoryUpdateValidator, categoryDeleteValidator, postCreateValidator, postUpdateValidator, postDeleteValidator, setRoleValidator, addOrUpdateRouteValidator}

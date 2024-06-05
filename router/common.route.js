@@ -1,6 +1,6 @@
 const express = require('express')
 
-const router = express();
+const router = express.Router();
 const verifyJWT = require('../middleware/auth.middleware.js');
 const onlyAdminAccess = require('../middleware/admin.middleware.js');
 const { createPost, getPosts, updatePost , deletePost } = require('../controller/post.controller.js');
